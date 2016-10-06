@@ -31,29 +31,29 @@
 
 \section{Repaso de las isometrías de $\mathbb{R}^3$}
 	\subsection{Isometrías lineales}
-    
+
     \noindent\textbf{Notación.}\quad Dada una aplicación lineal $T$ notaremos indistintamente $T$ tanto a la aplicación como a su matriz asociada en la base usual de $\mathbb R^3$.
     \\
-    
+
     Entre dos espacios vectoriales euclídeos abstractos se definen las isometrías como aquellas biyecciones que conservan la distancia, y las isometrías lineales son los isomorfismos que preservan el producto escalar. En estos apuntes realizamos una definición más concreta para el caso de $\mathbb R^3$.
-    
+
     \begin{mydef}
-    Una isometría de $\mathbb R^3$ es una aplicación lineal $A:\mathbb R^3\rightarrow \mathbb R^3$, $A(x)=Ax\ \forall x\in \mathbb{R}^3$, verificando $\left<Ax,Ay\right>=\left<x,y\right>\forall x,y\in \mathbb R^3$. Equivalentemente, $A$ conserva normas, es decir, $|Ax|=|x|\ \forall x\in\mathbb R^3$.
+    Una isometría de $\mathbb R^3$ es una aplicación lineal $A:\mathbb R^3\rightarrow \mathbb R^3$, $A(x)=Ax\ \forall x\in \mathbb{R}^3$, verificando $\left<Ax,Ay\right>=\left<x,y\right>\forall x,y\in \mathbb R^3$. Equivalentemente, $A$ conserva módulos, es decir, $|Ax|=|x|\ \forall x\in\mathbb R^3$.
     \end{mydef}
-    
+
     Como consecuencia directa de la definición tenemos que el determinante de la matriz asociada a una isometría es 1 o -1. Llamaremos a la isometría \textbf{directa} o \textbf{inversa} respectivamente.
-    
+
 	\begin{prop}
     Una aplicación lineal $A:\mathbb R^3\rightarrow\mathbb{R}^3$ es una isometría lineal $\Leftrightarrow$ su matriz asociada es ortogonal (es decir, $AA^t=I$).
     \end{prop}
 	\begin{prop}
     El conjunto de todas las aplicaciones lineales de un espacio vectorial euclídeo $V$, $O(V)$, tiene estructura de grupo con la composición.
     \end{prop}
-    
+
     % referencia: http://www.uv.es/ivorra/Libros/Geometria2.pdf
-    
+
 	A continuación se clasifican las isometrías de $\mathbb R^3$ y se dan algunos ejemplos.
-    
+
     \subsection{Clasificación de isometrías lineales}
 Sea $A:\mathbb R^3\rightarrow\mathbb R^3$ una isometría lineal. Consideremos el subespacio de vectores fijos que genera:
 \[V_A=\left\{x\in\mathbb R^3/Ax=x \right\},\]
@@ -61,18 +61,18 @@ Observamos que este subespacio se corresponde con el conjunto de vectores propio
 
     \subsubsection{Identidad}
     Si $\mathrm{dim}(V_A)=3$, entonces $A$ deja fijo todo $\mathbb R^3$. Por tanto, se trata de la identidad,  $A=I:\mathbb R^3\rightarrow \mathbb R^3, I(x)=x\ \forall x\in \mathbb R^3$.
-    
+
     \subsubsection{Simetría respecto de un plano}
   	Si $\mathrm{dim}(V_A)=2$, $A$ tiene el plano $V_A$ como subespacio de vectores fijos. En este caso, si $B=\{v_1, v_2\}$ es una base ortonormal de dicho plano y $v_3$ es un vector unitario ortogonal al plano, tenemos la base de $\mathbb{R}^3$ $B'=\{v_1,v_2,v_3\}$ de forma que
     \[M(A, B')=\begin{pmatrix}1&0&0\\0&1&0\\0&0&-1\end{pmatrix}.\]
-    
+
     Por tanto, $A$ lleva cada vector de $\mathbb R^3$ en su simétrico por el plano $V_A$.
-    
+
 \begin{ejemplo}
-Sea $B=\{e1 , e2 , e3\}$ la base usual de  $\mathbb{R}^3$. La simetría respecto al plano generado por los ejes X e Y tiene por matriz asociada:  
+Sea $B=\{e1 , e2 , e3\}$ la base usual de  $\mathbb{R}^3$. La simetría respecto al plano generado por los ejes X e Y tiene por matriz asociada:
 \[M(S_{X,Y},B)=
-    \begin{pmatrix} 
-    \ 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & -1 \\ 
+    \begin{pmatrix}
+    \ 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & -1 \\
     \end{pmatrix}.
   \]
 \end{ejemplo}
@@ -86,10 +86,10 @@ Por la condición de ortogonalidad de la matriz, es fácil comprobar que tendrá
 
 
 \begin{ejemplo}
-Sea $B=\{e1 , e2 , e3\}$ la base usual de  $\mathbb{R}^3$. La rotación de $\frac\pi 2$ respecto del eje Z tiene por matriz asociada:  
+Sea $B=\{e1 , e2 , e3\}$ la base usual de  $\mathbb{R}^3$. La rotación de $\frac\pi 2$ respecto del eje Z tiene por matriz asociada:
 \[M(R_{\pi/2},B)=
-    \begin{pmatrix} 
-    \ 0 & -1 & 0 \\ 1 & 0 & 0 \\ 0 & 0 & -1 \\ 
+    \begin{pmatrix}
+    \ 0 & -1 & 0 \\ 1 & 0 & 0 \\ 0 & 0 & -1 \\
     \end{pmatrix}.
   \]
 \end{ejemplo}
@@ -105,26 +105,26 @@ Si $\mathrm{dim}(V_A)=0$, entonces $A$ tiene al $0$ como único vector fijo. es 
 donde $\alpha$ es el ángulo de giro.
 
 \begin{ejemplo}
-Sea $B=\{e1 , e2 , e3\}$ la base usual de  $\mathbb{R}^3$. La simetría respecto del origen se corresponde con la rotación de $\pi$ alrededor del eje Z seguido por la simetría respecto del plano formado por los ejes X, Y:  
+Sea $B=\{e1 , e2 , e3\}$ la base usual de  $\mathbb{R}^3$. La simetría respecto del origen se corresponde con la rotación de $\pi$ alrededor del eje Z seguido por la simetría respecto del plano formado por los ejes X, Y:
 \[M(S_0,B)=
-    \begin{pmatrix} 
-    \ 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & -1 \\ 
+    \begin{pmatrix}
+    \ 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & -1 \\
     \end{pmatrix}
-    \begin{pmatrix} 
-    \ -1 & 0 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & 1 \\ 
+    \begin{pmatrix}
+    \ -1 & 0 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & 1 \\
     \end{pmatrix}=
-    \begin{pmatrix} 
-    \ -1 & 0 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & -1 \\ 
+    \begin{pmatrix}
+    \ -1 & 0 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & -1 \\
     \end{pmatrix}.
   \]
 \end{ejemplo}
 
 \noindent\textbf{Observación.}\quad En general, las simetrías respecto de un punto en $\mathbb R^3$ son casos particulares de esta situación.
     \\
-			 
+
 \subsection{Isometrías afines (Movimientos rígidos)}
 	\begin{mydef}
-    Un movimiento rígido es una aplicación $\phi:\mathbb R^3\rightarrow\mathbb R^3$ que conserva las distancias. 
+    Un movimiento rígido es una aplicación $\phi:\mathbb R^3\rightarrow\mathbb R^3$ que conserva las distancias.
     \end{mydef}
     \begin{lema}
     Todo movimiento rígido $\phi$ viene determinado por una isometría lineal $A:\mathbb R^3\rightarrow\mathbb R^3$ y un vector $b\in \mathbb R^3$ de la siguiente forma: $\phi(x)=Ax+b\ \forall x\in\mathbb R^3$. Llamamos a $A$ \textbf{isometría (lineal) asociada a $\phi$}.
@@ -139,25 +139,25 @@ Sea $B=\{e1 , e2 , e3\}$ la base usual de  $\mathbb{R}^3$. La simetría respecto
   Una simetría deslizante es una composición de una simetría y una traslación.
   \subsubsection{Composición de rotación y simetría}
   Las composiciones de rotación y simetría son un movimiento rígido, cuya isometría asociada es la composición de rotación y simetría (no deslizantes).
-  
+
   \begin{prop}
   Cualquier movimiento rígido es de uno de los tipos mencionados.
   \end{prop}
-  
+
   % referencia: http://www.ugr.es/%7Ecrosales/1516/cys/tema0.pdf
 
 \section{Uso en la teoría de Mecánica Celeste}
-	
+
     \subsection {Demostración de un pequeño lema}
     \begin{lema} Sea $A \in \mathbb{M}_{3} \left( \mathbb{R} \right)$ una isometría y  $x\in \mathbb{R}^3$ una solución del problema de fuerzas centrales \begin{equation}\ddot{x}=f(|x(t)|)\frac{x(t)}{|x(t)|}, \label{pfc}\end{equation} entonces Ax también es solución.
     \begin{proof}
     Para que $Ax$ sea solución, debe cumplir la ecuación dada en \ref{pfc}:
-    
+
     \begin{align*}
 	\frac{d^2}{dt^2}\left( Ax \right)=A\ddot{x}=Af(|x(t)|)\frac{x(t)}{|x(t)|}\stackrel{(*)}{=}f(|Ax(t)|)\frac{Ax(t)}{|Ax(t)|} \quad \forall t\in \mathbb{R}^{+},
     \end{align*}
     donde en $(*)$ se usa que la isometría preserva los módulos.
-    
+
     \end{proof}
 \end{lema}
 
@@ -165,7 +165,7 @@ Sea $B=\{e1 , e2 , e3\}$ la base usual de  $\mathbb{R}^3$. La simetría respecto
 
 \begin{itemize}
 \item\textbf{Geometría} - Carlos Ivorra - \url{http://www.uv.es/ivorra/Libros/Geometria2.pdf}
-\item\textbf{Repaso de aspectos de geometría afín euclídea} - César Rosales - \url{http://www.ugr.es/%7Ecrosales/1516/cys/tema0.pdf}
+\item\textbf{Repaso de aspectos de geometría afín euclídea} - César Rosales - \url{http://www.ugr.es/~crosales/1516/cys/tema0.pdf}
 \end{itemize}
 
 
