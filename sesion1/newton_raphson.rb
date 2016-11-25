@@ -66,10 +66,14 @@ end
 if __FILE__ == $0
   ε = 0.017
   ξ = Math::PI/2
+  
   example = NewtonRaphson.new(
     Math::PI,
+    1e-12,
     ->(u) { u - ε * Math::sin(u) - ξ },
     ->(u) { 1 - Math::cos(u) }
   )
-  puts example.approximate 1e-5
+
+  # Genera las primeras 100 aproximaciones
+  puts example.take(10).to_s
 end
