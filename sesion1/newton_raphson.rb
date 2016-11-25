@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # coding: utf-8
 
+DEFAULT_TOLERANCE = 1e-12
+
 # Clase base para métodos numéricos de aproximación de funciones
 class Approximator
 
@@ -9,7 +11,7 @@ class Approximator
   #  - tolerance: valor de tolerancia
   attr_accessor :current, :tolerance
   
-  def initialize initial, tolerance
+  def initialize initial, tolerance = DEFAULT_TOLERANCE
     self.current = initial
     self.tolerance = tolerance
   end
@@ -48,7 +50,7 @@ class NewtonRaphson < Approximator
   #  - derivative: almacena la derivada de f
   attr_accessor :function, :derivative
   
-  def initialize initial, tolerance, function, derivative
+  def initialize initial, tolerance = DEFAULT_TOLERANCE, function, derivative
     super(initial, tolerance)
     self.function = function
     self.derivative = derivative
@@ -69,7 +71,6 @@ if __FILE__ == $0
   
   example = NewtonRaphson.new(
     Math::PI,
-    1e-12,
     ->(u) { u - ε * Math::sin(u) - ξ },
     ->(u) { 1 - Math::cos(u) }
   )

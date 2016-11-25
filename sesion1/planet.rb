@@ -10,11 +10,11 @@ class Planet
   #  - ε:      módulo del vector de excentricidad
   #  - period: período de la órbita
   attr_accessor :a, :ε, :period
-  
+
   def initialize a, ε, period
     self.a = a
     self.ε = ε
-    self.period = period 
+    self.period = period
   end
 
   # Método que calcula la posición del planeta dada la anomalía
@@ -29,12 +29,11 @@ class Planet
     xi = ξ(t)
     NewtonRaphson.new(
       Math::PI,
-      1e-12,
       # La función que lleva u en f(u) - ξ
       ->(u) { f(u) - xi },
       # La función que lleva u en f'(u)
       ->(u) { df(u) }
-    ).approximate    
+    ).approximate
   end
 
   def position t
