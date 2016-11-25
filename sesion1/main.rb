@@ -15,4 +15,3 @@ t = begin
 # Creamos el planeta Tierra con sus parámetros
 tierra = Planet.new(1, 0.017, 365.26)
 puts "Posición de la Tierra: #{tierra.position(t)}"
-  
