@@ -6,14 +6,14 @@ require_relative "planet"
 
 t = begin
       ARGV[0].strip.to_f
-    rescue
+    rescue NoMethodError
       0
     end
 tierra = Planet.new(1, 0.017, 365.26)
 nr = NewtonRaphson.new(
   Math::PI,
-  Proc.new { |u| tierra.f(u) - tierra.ξ(t) },
-  Proc.new { |u| tierra.df(u) }
+  ->(u) { tierra.f(u) - tierra.ξ(t) },
+  ->(u) { tierra.df(u) }
 )
 
 ap = nr.approximate 1e-5

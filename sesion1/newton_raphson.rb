@@ -52,8 +52,8 @@ if __FILE__ == $0
   ξ = Math::PI/2
   example = NewtonRaphson.new(
     Math::PI,
-    Proc.new { |u| u - ε * Math::sin(u) - ξ },
-    Proc.new { |u| 1 - Math::cos(u) }
+    ->(u) { u - ε * Math::sin(u) - ξ },
+    ->(u) { 1 - Math::cos(u) }
   )
   puts example.approximate 1e-5
 end
