@@ -6,15 +6,22 @@
 class Planet
 
   # Datos miembro
+  #  - name:   nombre del planeta
   #  - a:      semieje mayor de la elipse
   #  - ε:      módulo del vector de excentricidad
   #  - period: período de la órbita
-  attr_accessor :a, :ε, :period
+  attr_accessor :name, :a, :ε, :period
 
-  def initialize a, ε, period
+  def initialize name, a, ε, period
+    self.name = name
     self.a = a
     self.ε = ε
     self.period = period
+  end
+
+  # Método que calcula el semieje menor de la órbita
+  def b
+    a * Math::sqrt(1 - ε**2)
   end
 
   # Método que calcula la posición del planeta dada la anomalía
