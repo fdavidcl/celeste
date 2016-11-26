@@ -18,7 +18,10 @@ end
 
 def plot_orbit name, data
   plot = Nyaplot::Plot.new
-  sc = plot.add(:scatter, *data.transpose)
+  # Añade origen (sol)
+  sol = plot.add(:scatter, [0], [0])
+  sol.color(Nyaplot::Colors.YlOrRd)
+  orbit = plot.add(:scatter, *data.transpose)
   plot.export_html "#{name}.html"
 end
 
