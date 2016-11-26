@@ -2,8 +2,25 @@
 # coding: utf-8
 
 # Cargamos las dependencias necesarias
+require "yaml"
 require_relative "newton_raphson"
 require_relative "planet"
+require "nyaplot"
+
+NUMBER_POINTS = 100
+
+def orbit_for planet
+  increment = planet.period / (NUMBER_POINTS)
+  (0 ... NUMBER_POINTS).map do |i|
+    planet.position(i * increment)
+  end
+end
+
+def plot_orbit name, data
+  plot = Nyaplot::Plot.new
+  sc = plot.add(:scatter, *data.transpose)
+  plot.export_html "#{name}.html"
+end
 
 # Leemos los argumentos proporcionados por el usuario
 t = begin
@@ -12,6 +29,11 @@ t = begin
       0
     end
 
-# Creamos el planeta Tierra con sus parámetros
-tierra = Planet.new(1, 0.017, 365.26)
-puts "Posición de la Tierra: #{tierra.position(t)}"
+planets = YAML.load_file("planets.yaml")
+            .map { |name, pars| Planet.new name, *pars.values }
+
+planets.each do |planet|
+  puts "Posición de #{planet.name}: #{planet.position(t)}"
+  
+  plot_orbit planet.name, orbit_for(planet)
+end
