@@ -1,0 +1,13 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    nyaplot (0.1.6)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  nyaplot
+
+BUNDLED WITH
+   1.13.6
