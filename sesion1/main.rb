@@ -7,21 +7,19 @@ require_relative "newton_raphson"
 require_relative "planet"
 require "nyaplot"
 
-NUMBER_POINTS = 100
+NUMBER_POINTS = 50
 
-def orbit_for planet
-  increment = planet.period / (NUMBER_POINTS)
-  (0 ... NUMBER_POINTS).map do |i|
-    planet.position(i * increment)
-  end
-end
-
-def plot_orbit name, data
+def plot_orbit planets, name
   plot = Nyaplot::Plot.new
   # Añade origen (sol)
   sol = plot.add(:scatter, [0], [0])
   sol.color(Nyaplot::Colors.YlOrRd)
-  orbit = plot.add(:scatter, *data.transpose)
+  sol.tooltip_contents(["Sol"])
+
+  planets.each do |planet|
+    plot.add(:scatter, *planet.orbit.transpose)
+  end
+
   plot.export_html "#{name}.html"
 end
 
@@ -37,6 +35,9 @@ planets = YAML.load_file("planets.yaml")
 
 planets.each do |planet|
   puts "Posición de #{planet.name}: #{planet.position(t)}"
-  
-  plot_orbit planet.name, orbit_for(planet)
 end
+
+puts planets
+
+plot_orbit planets[0 .. 3], "inner"
+plot_orbit planets[4 ... planets.length], "outer"
