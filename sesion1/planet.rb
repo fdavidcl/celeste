@@ -64,4 +64,14 @@ class Planet
   def df u
     1 - ε * Math::cos(u)
   end
+
+  def orbit points = 50
+    increment = period / (2 * points)
+    half = (0 .. points).map { |i| position(i * increment) }
+    half + half.map { |x,y| [x, -y] }
+  end
+
+  def to_s
+    "#{name} (#{a} AU, period: #{period} Earth days, eccentricity: #{ε})"
+  end
 end
