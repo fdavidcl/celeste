@@ -4,33 +4,38 @@
 # Clase que representa un planeta, englobando los parámetros que
 # nos permiten calcular su posición en el tiempo
 class Planet
+  private
+  # Método que calcula el semieje menor de la órbita
+  def semiminor_from_semimajor a, ecc
+    a * Math::sqrt(1 - ecc**2)
+  end
 
+  public
   # Datos miembro
-  #  - name:   nombre del planeta
-  #  - a:      semieje mayor de la elipse
-  #  - ε:      módulo del vector de excentricidad
+  #  - name: nombre del planeta
+  #  - semimajor_axis: semieje mayor de la elipse
+  #  - eccentricity: módulo del vector de excentricidad
   #  - period: período de la órbita
-  attr_accessor :name, :a, :ε, :period
+  attr_accessor :name, :a, :b, :ε, :period
+  alias :eccentricity :ε
+  alias :semimajor_axis :a
+  alias :semiminor_axis :b
 
   def initialize name, a, ε, period
     self.name = name
     self.a = a
     self.ε = ε
+    self.b = semiminor_from_semimajor(a, ε)
     self.period = period
-  end
-
-  # Método que calcula el semieje menor de la órbita
-  def b
-    a * Math::sqrt(1 - ε**2)
   end
 
   # Método que calcula la posición del planeta dada la anomalía
   # excéntrica u
-  def position_for_excentric u
+  def position_for_eccentric u
     [a * Math::cos(u) - ε, a * Math::sqrt(1 - ε**2) * Math::sin(u)]
   end
 
-  def excentric t
+  def eccentric t
     # Aproximamos la anomalía excéntrica mediante
     # Newton-Raphson
     xi = ξ(t)
@@ -44,7 +49,13 @@ class Planet
   end
 
   def position t
-    position_for_excentric excentric(t)
+    position_for_eccentric eccentric(t)
+  end
+  alias :x :position
+
+  # Cálculo de la distancia al sol
+  def distance_to_sun t
+    a * (1 - ε * Math::cos(eccentric t))
   end
 
   # Método que calcula el escalar independiente de u de la ecuación
@@ -67,8 +78,8 @@ class Planet
 
   def orbit points = 50
     increment = period / (2 * points)
-    half = (0 .. points).map { |i| position(i * increment) }
-    half + half.map { |x,y| [x, -y] }
+    half = (0 .. points).map { |i| x(i * increment) }
+    half + half.map { |x1,x2| [x1, -x2] }
   end
 
   def to_s
