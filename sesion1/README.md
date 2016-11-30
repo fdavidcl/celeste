@@ -4,7 +4,7 @@
 
 ### Ruby (opcional)
 
-Para utilizar las bibliotecas ya incluidas en el programa es necesario usar la versión 2.3.0 de Ruby o superior. Para instalarla, se puede utilizar EVM de la siguiente manera:
+Para utilizar las bibliotecas ya incluidas en el programa es necesario usar la versión 2.3.0 de Ruby o superior. Para instalarla, se puede utilizar RVM de la siguiente manera:
 
 ```
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
