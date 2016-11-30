@@ -34,7 +34,7 @@ planets = YAML.load_file("planets.yaml")
             .map { |name, pars| Planet.new name, *pars.values }
 
 planets.each do |planet|
-  puts "Posición de #{planet.name}: #{planet.position(t)}"
+  puts "Posición de #{planet.name}: #{planet.x(t)}"
 end
 
 puts planets
