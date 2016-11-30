@@ -1,6 +1,10 @@
 #!/usr/bin/env ruby
 # coding: utf-8
 
+require_relative "newton_raphson"
+require_relative "series"
+require "gsl"
+
 # Clase que representa un planeta, englobando los parámetros que
 # nos permiten calcular su posición en el tiempo
 class Planet
@@ -35,7 +39,7 @@ class Planet
     [a * Math::cos(u) - ε, a * Math::sqrt(1 - ε**2) * Math::sin(u)]
   end
 
-  def eccentric t
+  def eccentric_newton t
     # Aproximamos la anomalía excéntrica mediante
     # Newton-Raphson
     xi = ξ(t)
@@ -46,6 +50,21 @@ class Planet
       # La función que lleva u en f'(u)
       ->(u) { df(u) }
     ).approximate
+  end
+
+  def eccentric_fourier t
+    xi = ξ(t)
+    xi + SeriesApproximator.new(
+      ->(n) { 2.0/n * GSL::Sf::bessel_Jnu(n, n * self.ε) * Math::sin(n * xi) }
+    ).approximate
+  end
+  alias :eccentric :eccentric_fourier
+
+  def eccentric_test
+    n = 50
+    (0 .. n).each do |i|
+      puts "Newton: #{eccentric_newton i*period/n} Fourier: #{eccentric_fourier i*period/n}"
+    end
   end
 
   def position t
