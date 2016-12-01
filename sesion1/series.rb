@@ -4,6 +4,10 @@
 require_relative "approximator"
 
 class SeriesApproximator < Approximator
+
+  # Datos miembro
+  #  - term: función que evalúa el término n-ésimo de la serie
+  #  - n: índice del término actual se la serie
   attr_accessor :term, :n
   
   def initialize tolerance = DEFAULT_TOLERANCE, term
@@ -12,6 +16,8 @@ class SeriesApproximator < Approximator
     self.n = 0
   end
 
+  # Calcula el siguiente término de la serie y lo suma a
+  # la aproximación actual
   def next_one
     self.n += 1
     self.current += term.call(n)
