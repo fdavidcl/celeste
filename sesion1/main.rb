@@ -3,7 +3,6 @@
 
 # Cargamos las dependencias necesarias
 require "yaml"
-require_relative "newton_raphson"
 require_relative "planet"
 require "nyaplot"
 
@@ -34,10 +33,9 @@ planets = YAML.load_file("planets.yaml")
             .map { |name, pars| Planet.new name, *pars.values }
 
 planets.each do |planet|
-  puts "Posición de #{planet.name}: #{planet.x(t)}"
+  puts planet
+  puts "Posición en t=#{t}: #{planet.x(t)}"
 end
-
-puts planets
 
 plot_orbit planets[0 .. 3], "inner"
 plot_orbit planets[4 ... planets.length], "outer"
