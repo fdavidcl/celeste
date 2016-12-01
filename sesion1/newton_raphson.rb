@@ -31,7 +31,7 @@ if __FILE__ == $0
   example = NewtonRaphson.new(
     Math::PI,
     ->(u) { u - ε * Math::sin(u) - ξ },
-    ->(u) { 1 - Math::cos(u) }
+    ->(u) { 1 - ε * Math::cos(u) }
   )
 
   # Genera las primeras 100 aproximaciones
