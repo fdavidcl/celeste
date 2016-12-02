@@ -17,10 +17,12 @@ class Planet
   public
   # Datos miembro
   #  - name: nombre del planeta
-  #  - semimajor_axis: semieje mayor de la elipse
-  #  - eccentricity: módulo del vector de excentricidad
+  #  - a: semieje mayor de la elipse
+  #  - b: semieje menor de la elipse
+  #  - ε: módulo del vector de excentricidad
   #  - period: período de la órbita
   attr_accessor :name, :a, :b, :ε, :period
+  # Nombres descriptivos para algunos datos miembro:
   alias :eccentricity :ε
   alias :semimajor_axis :a
   alias :semiminor_axis :b
@@ -58,15 +60,18 @@ class Planet
       ->(n) { 2.0/n * GSL::Sf::bessel_Jnu(n, n * self.ε) * Math::sin(n * xi) }
     ).approximate
   end
+
+  # Elegimos el cálculo de la excentricidad que queremos usar:
   alias :eccentric :eccentric_fourier
 
-  def eccentric_test
-    n = 50
+  # Comprobación del funcionamiento de ambos métodos de aproximación
+  def eccentric_test n = 50
     (0 .. n).each do |i|
       puts "Newton: #{eccentric_newton i*period/n} Fourier: #{eccentric_fourier i*period/n}"
     end
   end
 
+  # Cálculo de la posiciñon en un instante dado
   def position t
     position_for_eccentric eccentric(t)
   end
