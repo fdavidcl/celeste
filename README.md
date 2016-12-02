@@ -4,7 +4,7 @@
 
 ### Ruby (opcional)
 
-Para utilizar las bibliotecas ya incluidas en el programa es necesario usar la versión 2.3.0 de Ruby o superior. Para instalarla, se puede utilizar RVM de la siguiente manera:
+Para utilizar el programa es necesario usar la versión 2.3.0 de Ruby o superior. Para instalarla, se puede utilizar RVM de la siguiente manera:
 
 ```
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
@@ -22,19 +22,12 @@ sudo apt-get install libgsl0-dev
 
 ### Dependencias de Ruby: Bundler
 
-Ejecutar la siguiente instrucción (si es necesario, usar `sudo`):
+Ejecutar las siguientes instrucciones (si es necesario, usar `sudo`):
 
 ```
 gem install bundler
-```
-
-Si la versión de Ruby que estamos usando (comprobar `ruby --version`) es inferior a la 2.3.0, entonces además ejecutaremos
-
-```
 bundle install
 ```
-
-para descargar las dependencias restantes.
 
 ## Uso
 

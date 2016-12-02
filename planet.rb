@@ -21,11 +21,12 @@ class Planet
   #  - b: semieje menor de la elipse
   #  - ε: módulo del vector de excentricidad
   #  - period: período de la órbita
-  attr_accessor :name, :a, :b, :ε, :period
+  attr_accessor :name, :a, :b, :ε, :period, :μ, :h
   # Nombres descriptivos para algunos datos miembro:
   alias :eccentricity :ε
   alias :semimajor_axis :a
   alias :semiminor_axis :b
+  alias :energy :h
 
   def initialize name, a, ε, period
     self.name = name
@@ -33,6 +34,8 @@ class Planet
     self.ε = ε
     self.b = semiminor_from_semimajor(a, ε)
     self.period = period
+    self.μ = (2 * Math::PI / period)**2 * a**3
+    self.h = -μ / (2*a)
   end
 
   # Método que calcula la posición del planeta dada la anomalía
@@ -61,13 +64,18 @@ class Planet
     ).approximate
   end
 
-  # Elegimos el cálculo de la excentricidad que queremos usar:
+  # Elegimos el cálculo de la anomalía excéntrica que queremos usar:
   alias :eccentric :eccentric_fourier
 
+  # Derivada de la excéntrica
+  def d_eccentric t
+    2 * Math::PI/(period * (1 - ε * Math::cos(eccentric t)))
+  end
+
   # Comprobación del funcionamiento de ambos métodos de aproximación
-  def eccentric_test n = 50
-    (0 .. n).each do |i|
-      puts "Newton: #{eccentric_newton i*period/n} Fourier: #{eccentric_fourier i*period/n}"
+  def eccentric_test *ts
+    ts.flatten.each do |t|
+      puts " [u(t=#{t})] Newton: #{eccentric_newton t} Fourier: #{eccentric_fourier t}"
     end
   end
 
@@ -76,6 +84,12 @@ class Planet
     position_for_eccentric eccentric(t)
   end
   alias :x :position
+
+  def velocity t
+    u = eccentric(t)
+    du = d_eccentric(t)
+    [-a * Math::sin(u) * du, b * Math::cos(u) * du]
+  end
 
   # Cálculo de la distancia al sol
   def distance_to_sun t
@@ -109,8 +123,30 @@ class Planet
   end
 
   def to_s
-    "#{name} (#{a} AU, period: #{period} Earth days, eccentricity: #{ε})"
+    "\e[1m#{name}\e[m (#{a} AU, period: #{period} Earth days, eccentricity: #{ε})"
   end
 
   # TODO: t(u), h(t)
+
+  def angular_moment t
+    [0, 0, a**2 * d_eccentric(t) * Math::sqrt(1 - ε**2) * (1 - ε * Math::cos(eccentric(t)))]
+  end
+  alias :c :angular_moment
+  
+  def calculate_energy t
+    # Módulo de la velocidad al cuadrado
+    dxsquare = velocity(t).map{ |e| e**2 }.inject(&:+)
+
+    xmod = Math::sqrt(position(t).map{ |e| e**2 }.inject(&:+))
+    
+    kinetic = dxsquare/2
+    potential = μ / xmod
+
+    kinetic - potential
+  end
+  alias :h :energy
+
+  def area t0 = 0, t1 = self.period
+    c(t0)[2] * (t1 - t0) / 2
+  end
 end

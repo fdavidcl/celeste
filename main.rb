@@ -35,6 +35,13 @@ planets = YAML.load_file("planets.yaml")
 planets.each do |planet|
   puts planet
   puts "Posición en t=#{t}: #{planet.x(t)}"
+  puts "Velocidad en t=#{t}: #{planet.velocity(t)}"
+  puts "Comprobación de Newton-Raphson vs. Fourier:"
+  planet.eccentric_test(t)
+  puts "Área encerrada por la órbita: #{planet.area}"
+  puts "Momento angular en t=#{t}: #{planet.c(t)}"
+  puts "Energía teórica: #{planet.h}, energía en t=#{t}: #{planet.calculate_energy(t)}"
+  puts nil
 end
 
 plot_orbit planets[0 .. 3], "inner"
