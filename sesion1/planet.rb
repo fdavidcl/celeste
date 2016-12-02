@@ -95,6 +95,8 @@ class Planet
     1 - ε * Math::cos(u)
   end
 
+  # Aproxima la órbita del planeta en un número de puntos
+  # (equidistribuidos) dado
   def orbit points = 50
     increment = period / (2 * points)
     half = (0 .. points).map { |i| x(i * increment) }
@@ -104,4 +106,6 @@ class Planet
   def to_s
     "#{name} (#{a} AU, period: #{period} Earth days, eccentricity: #{ε})"
   end
+
+  # TODO: t(u), h(t)
 end
