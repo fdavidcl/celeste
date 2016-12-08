@@ -1,0 +1,16 @@
+!!! 5
+%html
+  %head
+    %script{src: "http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js"}
+    %script=Nyaplot.generate_init_code
+  %body
+    %h3 Datos
+    - @planets.each do |planet|
+      %p
+        %strong #{planet.name}:
+        #{planet.a} AU,
+        #{planet.period} años terrestres,
+        excentricidad #{planet.ε}
+    
+    = @frame.generate_body
+
