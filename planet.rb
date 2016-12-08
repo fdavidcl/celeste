@@ -126,8 +126,6 @@ class Planet
     "\e[1m#{name}\e[m (#{a} AU, period: #{period} Earth days, eccentricity: #{ε})"
   end
 
-  # TODO: t(u), h(t)
-
   def angular_moment t
     [0, 0, a**2 * d_eccentric(t) * Math::sqrt(1 - ε**2) * (1 - ε * Math::cos(eccentric(t)))]
   end
