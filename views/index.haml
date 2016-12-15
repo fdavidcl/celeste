@@ -1,16 +1,46 @@
 !!! 5
 %html
   %head
+    %link{rel: "stylesheet", href: "https://unpkg.com/purecss@0.6.1/build/pure-min.css"}
+    %link{rel: "stylesheet", href: "https://unpkg.com/purecss@0.6.1/build/grids-responsive-min.css"}
+    %link{rel: "stylesheet", href: "/main.css"}
     %script{src: "http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js"}
     %script=Nyaplot.generate_init_code
   %body
-    %h3 Datos
-    - @planets.each do |planet|
-      %p
-        %strong #{planet.name}:
-        #{planet.a} AU,
-        #{planet.period} años terrestres,
-        excentricidad #{planet.ε}
-    
-    = @frame.generate_body
+    %header
+      .title Celeste
+      
+    .wrapper
+      .pure-g
+        .pure-u-1.pure-u-lg-1-3
+          %h3 Datos
+          - @planets.each do |planet|
+            %p
+              %strong #{planet.name}:
+              #{planet.a} AU,
+              #{planet.period} días terrestres,
+              excentricidad #{planet.ε}
+
+        .pure-u-1.pure-u-lg-2-3
+          = @frame.generate_body
+
+        .pure-u-1
+          %h3 Cálculos (t = #{@t})
+          %form{action: "/", method: "GET"}
+            %input{type: "number", placeholder: "Tiempo en días", value: @t, name: "t"}
+            %input{type: "submit", value: "Calcular"}
+          %table
+            %tr
+              %th Posición
+              %th Velocidad
+              %th Momento angular
+              %th Cálculo de la energía
+              %th Distancia al Sol
+            - @planets.each do |planet|
+              %tr
+                %td= "(%.4f, %.4f)" % planet.x(@t)
+                %td= "(%.4f, %.4f)" % planet.velocity(@t)
+                %td= "(%.4f, %.4f, %.4f)" % planet.angular_moment(@t)
+                %td= "%.4f" % planet.calculate_energy(@t)
+                %td= "%.4f" % planet.distance_to_sun(@t)
 
