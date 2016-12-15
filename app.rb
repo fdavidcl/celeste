@@ -34,5 +34,6 @@ before do
 end
 
 get "/" do
+  @t = params["t"].to_i
   haml :index
 end
