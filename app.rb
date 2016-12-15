@@ -21,6 +21,7 @@ def plot_orbit planets
 end
 
 set :bind, '0.0.0.0'
+set :port, 8080
 
 before do
   @planets = YAML.load_file("planets.yaml")
