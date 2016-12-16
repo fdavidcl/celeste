@@ -5,6 +5,7 @@ require_relative "utils"
 require_relative "newton_raphson"
 require_relative "series"
 require "gsl"
+require "matrix"
 
 # Clase que representa un planeta, englobando los parámetros que
 # nos permiten calcular su posición en el tiempo
@@ -22,14 +23,14 @@ class Planet
   #  - b: semieje menor de la elipse
   #  - ε: módulo del vector de excentricidad
   #  - period: período de la órbita
-  attr_accessor :name, :a, :b, :ε, :period, :μ, :h
+  attr_accessor :name, :a, :b, :ε, :period, :μ, :h, :i, :Ω, :ω, :matrix3d
   # Nombres descriptivos para algunos datos miembro:
   alias :eccentricity :ε
   alias :semimajor_axis :a
   alias :semiminor_axis :b
   alias :energy :h
 
-  def initialize name, a, ε, period
+  def initialize name, a, ε, period, i, Ω, ω
     self.name = name
     self.a = a
     self.ε = ε
@@ -37,13 +38,35 @@ class Planet
     self.period = period
     self.μ = (2 * Math::PI / period)**2 * a**3
     self.h = -μ / (2*a)
+    self.i = i / 180.0 * Math::PI
+    self.Ω = Ω / 180.0 * Math::PI
+    self.ω = (ω - Ω) / 180.0 * Math::PI
+    self.matrix3d = Matrix[
+      [Math::cos(Ω) * Math::cos(ω) - Math::sin(Ω) * Math::sin(ω),
+       -Math::cos(Ω)*Math::sin(ω)-Math::cos(ω)*Math::sin(Ω),
+       Math::sin(Ω) * Math::sin(i)],
+      [Math::cos(ω)*Math::sin(Ω)+Math::cos(Ω)*Math::cos(i)*Math::sin(ω),
+       -Math::sin(Ω)*Math::sin(ω)+Math::cos(Ω)*Math::cos(i)*Math::cos(ω),
+       -Math::cos(Ω) * Math::sin(i)],
+      [Math::cos(Ω) * Math::sin(i) * Math::sin(ω),
+       Math::cos(Ω) * Math::sin(i) * Math::cos(ω),
+       Math::cos(i)]
+    ]
   end
 
   # Método que calcula la posición del planeta dada la anomalía
   # excéntrica u
-  def position_for_eccentric u
+  def position_for_eccentric_2d u
     [a * Math::cos(u) - ε, a * Math::sqrt(1 - ε**2) * Math::sin(u)]
   end
+  
+  def position_for_eccentric_3d u
+    twod = Matrix[[*position_for_eccentric_2d(u), 0]].transpose
+
+    (self.matrix3d * twod).to_a.flatten
+  end
+
+  alias :position_for_eccentric :position_for_eccentric_3d
 
   def eccentric_newton t
     # Aproximamos la anomalía excéntrica mediante
@@ -117,10 +140,10 @@ class Planet
 
   # Aproxima la órbita del planeta en un número de puntos
   # (equidistribuidos) dado
-  def orbit points = 50
-    increment = period / (2 * points)
-    half = (0 .. points).map { |i| x(i * increment) }
-    half + half.reverse_each.map { |x1,x2| [x1, -x2] }
+  def orbit points = 100
+    increment = period / points
+    (0 .. points).map { |i| x(i * increment) }
+    #half + half.reverse_each.map { |x1,x2,x3| [x1, -x2] }
   end
 
   def to_s
@@ -134,9 +157,9 @@ class Planet
   
   def calculate_energy t
     # Módulo de la velocidad al cuadrado
-    dxsquare = velocity(t).map{ |e| e**2 }.inject(&:+)
+    dxsquare = velocity(t).norm ** 2
 
-    xmod = Math::sqrt(position(t).map{ |e| e**2 }.inject(&:+))
+    xmod = position(t).norm
     
     kinetic = dxsquare/2
     potential = μ / xmod

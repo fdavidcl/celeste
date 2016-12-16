@@ -5,6 +5,7 @@ require "sinatra"
 require "yaml"
 require_relative "planet"
 require "nyaplot"
+require "nyaplot3d"
 
 COLORS = [
   "#e91e63",
@@ -19,38 +20,22 @@ COLORS = [
 ]
 
 def plot_orbit planets, t, colors
-  plot = Nyaplot::Plot.new
+  plot = Nyaplot::Plot3D.new
   # Añade origen (sol)
-  sol = plot.add(:scatter, [0], [0])
-  sol.color("#fdd835")
-  sol.title("Sol")
+  sol = plot.add(:scatter, [0], [0], [0])
+  #sol.color("#fdd835")
+  #sol.title("Sol")
 
   planets.zip(colors).each do |planet, color|
     nl = plot.add(:line, *planet.orbit.transpose)
-    nl.color(color)
+    nl.colors(color)
     np = plot.add(:scatter, *[planet.x(t)].transpose)
-    np.color(color)
-    np.title(planet.name)
-    nl.legend(false)
+    #np.color(color)
+    #np.title(planet.name)
+    #nl.legend(false)
   end
 
-  plot.legend(true)
-  plot
-end
-
-def plot_orbit_3d planets, t, colors
-  plot = Nyaplot::Plot.new
-  # Añade origen (sol)
-  sol = plot.add(:scatter, [0], [0])
-  sol.color("#fdd835")
-  sol.tooltip_contents(["Sol"])
-
-  planets.zip(colors).each do |planet, color|
-    nl = plot.add(:line, *planet.orbit.transpose)
-    np = plot.add(:scatter, *[planet.x(t)].transpose)
-    np.color(color)
-  end
-  
+  # plot.legend(true)
   plot
 end
 
