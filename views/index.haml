@@ -11,39 +11,84 @@
     %script=Nyaplot.generate_init_code
   %body
     %header
-      .title Celeste
+      .title.wrapper Celeste
       
     .wrapper
       .pure-g
-        .pure-u-1.pure-u-lg-1-3
-          %h3 Datos
-          - @planets.each do |planet|
+        .pure-u-1.pure-u-lg-1-3.pure-u-xl-1-4
+          %h2 Datos
+          - @planets.zip(COLORS).each do |planet, color|
             %p
-              %strong #{planet.name}:
-              #{planet.a} AU,
-              #{planet.period} días terrestres,
-              excentricidad #{planet.ε}
+              %strong{style: "color: #{color}"}  #{planet.name}
+              %ul
+                %li longitud del semieje mayor: #{planet.a} AU
+                %li longitud del semieje menor: #{"%.4f" % planet.b} AU
+                %li período orbital: #{planet.period} días terrestres
+                %li excentricidad: #{planet.ε}
+                %li energía (constante): #{"%e" % planet.energy}
 
-        .pure-u-1.pure-u-lg-2-3
-          = @frame.generate_body
+          %a{href: "https://github.com/fdavidcl/celeste/raw/master/planets.yaml"} Datos en formato YAML
+          
+        .pure-u-1.pure-u-lg-2-3.pure-u-xl-1-2
+          %h2 Órbitas
+          %form.pure-form{action: "/", method: "GET"}
+            %label{for: "time1"} Tiempo en días
+            %input#time1{type: "number", placeholder: "Tiempo en días", value: @t, name: "t"}
+            %input.pure-button.pure-button-primary{type: "submit", value: "Calcular"}
+
+          .plots
+            = @frame.generate_body
 
         .pure-u-1
-          %h3 Cálculos (t = #{@t})
-          %form{action: "/", method: "GET"}
-            %input{type: "number", placeholder: "Tiempo en días", value: @t, name: "t"}
-            %input{type: "submit", value: "Calcular"}
-          %table
-            %tr
-              %th Posición
-              %th Velocidad
-              %th Momento angular
-              %th Cálculo de la energía
-              %th Distancia al Sol
+          %h2 Cálculos
+          %form.pure-form{action: "/", method: "GET"}
+            %label{for: "time2"} Tiempo en días
+            %input#time2{type: "number", placeholder: "Tiempo en días", value: @t, name: "t"}
+            %input.pure-button.pure-button-primary{type: "submit", value: "Calcular"}
+          %table.pure-table
+            %thead
+              %tr
+                %th Planeta
+                %th Posición (Newton-Raphson)
+                %th Posición (Fourier)
+                %th Velocidad
+                %th Momento angular
+                
             - @planets.each do |planet|
               %tr
-                %td= "(%.4f, %.4f)" % planet.x(@t)
+                %td= planet.name
+                %td= "(%.4f, %.4f)" % planet.position_for_eccentric(planet.eccentric_newton @t)
+                %td= "(%.4f, %.4f)" % planet.position_for_eccentric(planet.eccentric_fourier @t)
                 %td= "(%.4f, %.4f)" % planet.velocity(@t)
                 %td= "(%.4f, %.4f, %.4f)" % planet.angular_moment(@t)
-                %td= "%.4f" % planet.calculate_energy(@t)
-                %td= "%.4f" % planet.distance_to_sun(@t)
+                
+            
+          %table.pure-table
+            %thead
+              %tr
+                %th Planeta
+                %th Cálculo de la energía
+                %th Distancia al Sol
+                %th Área barrida
+            - @planets.each do |planet|
+              %tr
+                %td= planet.name
+                
+                %td= "%e" % planet.calculate_energy(@t)
+                %td
+                  = "%.4f" % planet.distance_to_sun(@t)
+                  AU
+                %td
+                  = "%.4f" % planet.area(0, @t)
+                  AU
 
+    %footer
+      .wrapper
+        %p
+          &copy; 2016 David Charte
+        %p
+          El código de este sitio está disponible en
+          %a{href: "https://github.com/fdavidcl/celeste"} GitHub
+          y se distribuye bajo la
+          %a{href: "https://raw.githubusercontent.com/fdavidcl/celeste/master/LICENSE"} licencia MIT
+          \.

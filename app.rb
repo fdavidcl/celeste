@@ -6,35 +6,70 @@ require "yaml"
 require_relative "planet"
 require "nyaplot"
 
-def plot_orbit planets
+COLORS = [
+  "#e91e63",
+  "#9c27b0",
+  "#3f51b5",
+  "#03a9f4",
+  "#009688",
+  "#4caf50",
+  "#cddc39",
+  "#ffc107",
+  "#795548"
+]
+
+def plot_orbit planets, t, colors
   plot = Nyaplot::Plot.new
   # Añade origen (sol)
   sol = plot.add(:scatter, [0], [0])
-  sol.color(Nyaplot::Colors.YlOrRd)
-  sol.tooltip_contents(["Sol"])
+  sol.color("#fdd835")
+  sol.title("Sol")
 
-  planets.each do |planet|
-    plot.add(:scatter, *planet.orbit.transpose)
+  planets.zip(colors).each do |planet, color|
+    nl = plot.add(:line, *planet.orbit.transpose)
+    nl.color(color)
+    np = plot.add(:scatter, *[planet.x(t)].transpose)
+    np.color(color)
+    np.title(planet.name)
+    nl.legend(false)
   end
 
+  plot.legend(true)
+  plot
+end
+
+def plot_orbit_3d planets, t, colors
+  plot = Nyaplot::Plot.new
+  # Añade origen (sol)
+  sol = plot.add(:scatter, [0], [0])
+  sol.color("#fdd835")
+  sol.tooltip_contents(["Sol"])
+
+  planets.zip(colors).each do |planet, color|
+    nl = plot.add(:line, *planet.orbit.transpose)
+    np = plot.add(:scatter, *[planet.x(t)].transpose)
+    np.color(color)
+  end
+  
   plot
 end
 
 set :bind, '0.0.0.0'
 set :port, 8080
 
-before do
+def generate_frames
   @planets = YAML.load_file("planets.yaml")
                .map { |name, pars| Planet.new name, *pars.values }
   @inner = @planets[0 .. 3]
   @outer = @planets[4 ... @planets.size]
   
   @frame = Nyaplot::Frame.new
-  @frame.add(plot_orbit @inner)
-  @frame.add(plot_orbit @outer)
+  @frame.add(plot_orbit @inner, @t, COLORS[0 .. 3])
+  @frame.add(plot_orbit @outer, @t, COLORS[4 ... @planets.size])
 end
 
 get "/" do
   @t = params["t"].to_i
+  generate_frames
   haml :index
 end

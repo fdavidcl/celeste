@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # coding: utf-8
 
+require_relative "utils"
 require_relative "newton_raphson"
 require_relative "series"
 require "gsl"
@@ -119,7 +120,7 @@ class Planet
   def orbit points = 50
     increment = period / (2 * points)
     half = (0 .. points).map { |i| x(i * increment) }
-    half + half.map { |x1,x2| [x1, -x2] }
+    half + half.reverse_each.map { |x1,x2| [x1, -x2] }
   end
 
   def to_s
@@ -145,6 +146,7 @@ class Planet
   alias :h :energy
 
   def area t0 = 0, t1 = self.period
-    c(t0)[2] * (t1 - t0) / 2
+    t0, t1 = 0, self.period if (t1 - t0).abs > self.period
+    c(t0).norm * (t1 - t0) / 2
   end
 end

@@ -1,13 +1,24 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    ffi (1.9.14)
     gsl (2.1.0.1)
     haml (4.0.7)
       tilt
+    listen (3.1.5)
+      rb-fsevent (~> 0.9, >= 0.9.4)
+      rb-inotify (~> 0.9, >= 0.9.7)
+      ruby_dep (~> 1.2)
     nyaplot (0.1.6)
     rack (1.6.5)
     rack-protection (1.5.3)
       rack
+    rb-fsevent (0.9.8)
+    rb-inotify (0.9.7)
+      ffi (>= 0.5.0)
+    rerun (0.11.0)
+      listen (~> 3.0)
+    ruby_dep (1.5.0)
     sinatra (1.4.7)
       rack (~> 1.5)
       rack-protection (~> 1.4)
@@ -21,6 +32,7 @@ DEPENDENCIES
   gsl
   haml
   nyaplot
+  rerun
   sinatra
 
 BUNDLED WITH

@@ -7,3 +7,7 @@ group :web do
   gem 'sinatra'
   gem 'haml'
 end
+
+group :development do
+  gem 'rerun'
+end
