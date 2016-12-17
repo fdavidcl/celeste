@@ -4,6 +4,7 @@
     %meta{charset: "utf-8"}
     %meta{"http-equiv": "x-ua-compatible", content: "ie=edge"}
     %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
+    %title Órbitas del Sistema Solar - Mecánica Celeste
     %link{rel: "stylesheet", href: "https://unpkg.com/purecss@0.6.1/build/pure-min.css"}
     %link{rel: "stylesheet", href: "https://unpkg.com/purecss@0.6.1/build/grids-responsive-min.css"}
     %link{rel: "stylesheet", href: "/main.css"}
@@ -11,11 +12,11 @@
     %script=Nyaplot.generate_init_code
   %body
     %header
-      .title.wrapper Celeste
+      .title.wrapper Órbitas del Sistema Solar - Mecánica Celeste
       
     .wrapper
       .pure-g
-        .pure-u-1.pure-u-lg-1-3.pure-u-xl-1-4
+        .pure-u-1.pure-u-lg-1-3
           %h2 Datos
           - @planets.zip(COLORS).each do |planet, color|
             %p
@@ -24,10 +25,11 @@
                 %li longitud del semieje mayor: #{planet.a} AU
                 %li longitud del semieje menor: #{"%.4f" % planet.b} AU
                 %li período orbital: #{planet.period} días terrestres
-                %li excentricidad: #{planet.ε}
+                %li excentricidad: #{planet.ε} (#{"%.3f" % planet.ω} rad)
                 %li energía (constante): #{"%e" % planet.energy}
+                %li ángulos del plano orbital: i = #{"%.3f" % planet.i} rad, Ω = #{"%.3f" % planet.Ω} rad
 
-          %a{href: "https://github.com/fdavidcl/celeste/raw/master/planets.yaml"} Datos en formato YAML
+          %a{href: "https://github.com/fdavidcl/celeste/raw/app/planets.yaml"} Datos en formato YAML
           
         .pure-u-1.pure-u-lg-2-3.pure-u-xl-1-2
           %h2 Órbitas
@@ -37,6 +39,7 @@
             %input.pure-button.pure-button-primary{type: "submit", value: "Calcular"}
 
           .plots
+            %p Utiliza la rueda del ratón para acercar y alejar los gráficos y arrastra sobre los gráficos para mover.
             = @frame.generate_body
 
         .pure-u-1
@@ -51,16 +54,16 @@
                 %th Planeta
                 %th Posición (Newton-Raphson)
                 %th Posición (Fourier)
-                %th Velocidad
+                %th Velocidad (sobre el plano orbital)
                 %th Momento angular
                 
             - @planets.each do |planet|
               %tr
                 %td= planet.name
-                %td= "(%.4f, %.4f)" % planet.position_for_eccentric(planet.eccentric_newton @t)
-                %td= "(%.4f, %.4f)" % planet.position_for_eccentric(planet.eccentric_fourier @t)
+                %td= "(%.4f, %.4f, %.4f)" % planet.position_for_eccentric(planet.eccentric_newton @t)
+                %td= "(%.4f, %.4f, %.4f)" % planet.position_for_eccentric(planet.eccentric_fourier @t)
                 %td= "(%.4f, %.4f)" % planet.velocity(@t)
-                %td= "(%.4f, %.4f, %.4f)" % planet.angular_moment(@t)
+                %td= "%.4f" % planet.angular_moment(@t)[2]
                 
             
           %table.pure-table

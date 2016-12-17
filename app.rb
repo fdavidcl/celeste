@@ -23,19 +23,28 @@ def plot_orbit planets, t, colors
   plot = Nyaplot::Plot3D.new
   # Añade origen (sol)
   sol = plot.add(:scatter, [0], [0], [0])
-  #sol.color("#fdd835")
-  #sol.title("Sol")
+  sol.fill_color("#fdd835")
+  sol.name("Sol")
+
+  # Pequeño hack que toma la máxima distancia al sol y dibuja partículas
+  # en los límites que obligan a que el rango de los 3 ejes sea el mismo
+  l = planets.max_by(&:a).a
+  limits = plot.add(:particles, [-l, -l, -l, l, l, l], [-l, -l, l, l, l, -l], [-l, l, l, l, -l, -l])
+  limits.size(0.0001)
+  limits.has_legend(false)
 
   planets.zip(colors).each do |planet, color|
-    nl = plot.add(:line, *planet.orbit.transpose)
-    nl.colors(color)
-    np = plot.add(:scatter, *[planet.x(t)].transpose)
-    #np.color(color)
-    #np.title(planet.name)
-    #nl.legend(false)
+    orbit = plot.add(:particles, *planet.orbit.transpose)
+    orbit.has_legend(false)
+    orbit.color(color)
+    orbit.size(0.1)
+    
+    point = plot.add(:scatter, *[planet.x(t)].transpose)
+    point.fill_color(color)
+    point.name(planet.name)
+    point.size(1)
   end
 
-  # plot.legend(true)
   plot
 end
 

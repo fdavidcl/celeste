@@ -23,14 +23,14 @@ class Planet
   #  - b: semieje menor de la elipse
   #  - ε: módulo del vector de excentricidad
   #  - period: período de la órbita
-  attr_accessor :name, :a, :b, :ε, :period, :μ, :h, :i, :Ω, :ω, :matrix3d
+  attr_accessor :name, :a, :b, :ε, :period, :μ, :h, :i, :Ω, :ω, :matrix3d, :inclination, :rotation1, :rotation2
   # Nombres descriptivos para algunos datos miembro:
   alias :eccentricity :ε
   alias :semimajor_axis :a
   alias :semiminor_axis :b
   alias :energy :h
 
-  def initialize name, a, ε, period, i, Ω, ω
+  def initialize name, a, ε, period, inclination, nodeline_omega, omega_bar
     self.name = name
     self.a = a
     self.ε = ε
@@ -38,19 +38,24 @@ class Planet
     self.period = period
     self.μ = (2 * Math::PI / period)**2 * a**3
     self.h = -μ / (2*a)
-    self.i = i / 180.0 * Math::PI
-    self.Ω = Ω / 180.0 * Math::PI
-    self.ω = (ω - Ω) / 180.0 * Math::PI
-    self.matrix3d = Matrix[
-      [Math::cos(Ω) * Math::cos(ω) - Math::sin(Ω) * Math::sin(ω),
-       -Math::cos(Ω)*Math::sin(ω)-Math::cos(ω)*Math::sin(Ω),
-       Math::sin(Ω) * Math::sin(i)],
-      [Math::cos(ω)*Math::sin(Ω)+Math::cos(Ω)*Math::cos(i)*Math::sin(ω),
-       -Math::sin(Ω)*Math::sin(ω)+Math::cos(Ω)*Math::cos(i)*Math::cos(ω),
-       -Math::cos(Ω) * Math::sin(i)],
-      [Math::cos(Ω) * Math::sin(i) * Math::sin(ω),
-       Math::cos(Ω) * Math::sin(i) * Math::cos(ω),
-       Math::cos(i)]
+    self.i = inclination / 180.0 * Math::PI
+    self.Ω = nodeline_omega / 180.0 * Math::PI
+    self.ω = (omega_bar - nodeline_omega) / 180.0 * Math::PI
+
+    self.inclination = Matrix[
+      [1, 0, 0],
+      [0, Math::cos(i), -Math::sin(i)],
+      [0, Math::sin(i), Math::cos(i)]
+    ]
+    self.rotation1 = Matrix[
+      [Math::cos(ω), -Math::sin(ω), 0],
+      [Math::sin(ω), Math::cos(ω), 0],
+      [0, 0, 1]
+    ]
+    self.rotation2 = Matrix[
+      [Math::cos(Ω), -Math::sin(Ω), 0],
+      [Math::sin(Ω), Math::cos(Ω), 0],
+      [0, 0, 1]
     ]
   end
 
@@ -62,8 +67,7 @@ class Planet
   
   def position_for_eccentric_3d u
     twod = Matrix[[*position_for_eccentric_2d(u), 0]].transpose
-
-    (self.matrix3d * twod).to_a.flatten
+    (rotation2 * inclination * rotation1 * twod).to_a.flatten
   end
 
   alias :position_for_eccentric :position_for_eccentric_3d
