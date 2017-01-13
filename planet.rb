@@ -64,10 +64,14 @@ class Planet
   def position_for_eccentric_2d u
     [a * (Math::cos(u) - ε), a * Math::sqrt(1 - ε**2) * Math::sin(u)]
   end
+
+  def paso_a_3d v
+    v = Matrix[v].transpose
+    (rotation2 * inclination * rotation1 * v).to_a.flatten
+  end
   
   def position_for_eccentric_3d u
-    twod = Matrix[[*position_for_eccentric_2d(u), 0]].transpose
-    (rotation2 * inclination * rotation1 * twod).to_a.flatten
+    paso_a_3d [*position_for_eccentric_2d(u), 0]
   end
 
   alias :position_for_eccentric :position_for_eccentric_3d
@@ -113,10 +117,14 @@ class Planet
   end
   alias :x :position
 
-  def velocity t
+  def velocity_2d t
     u = eccentric(t)
     du = d_eccentric(t)
     [-a * Math::sin(u) * du, b * Math::cos(u) * du]
+  end
+
+  def velocity t
+    paso_a_3d [*velocity_2d(t), 0]
   end
 
   # Cálculo de la distancia al sol
@@ -154,14 +162,18 @@ class Planet
     "\e[1m#{name}\e[m (#{a} AU, period: #{period} Earth days, eccentricity: #{ε})"
   end
 
-  def angular_moment t
+  def angular_moment_2d t
     [0, 0, a**2 * d_eccentric(t) * Math::sqrt(1 - ε**2) * (1 - ε * Math::cos(eccentric(t)))]
+  end
+
+  def angular_moment t
+    paso_a_3d angular_moment_2d(t)
   end
   alias :c :angular_moment
   
   def calculate_energy t
     # Módulo de la velocidad al cuadrado
-    dxsquare = velocity(t).norm ** 2
+    dxsquare = velocity_2d(t).norm ** 2
 
     xmod = position(t).norm
     

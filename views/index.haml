@@ -54,7 +54,7 @@
                 %th Planeta
                 %th Posición (Newton-Raphson)
                 %th Posición (Fourier)
-                %th Velocidad (sobre el plano orbital)
+                %th Velocidad
                 %th Momento angular
                 
             - @planets.each do |planet|
@@ -62,9 +62,8 @@
                 %td= planet.name
                 %td= "(%.4f, %.4f, %.4f)" % planet.position_for_eccentric(planet.eccentric_newton @t)
                 %td= "(%.4f, %.4f, %.4f)" % planet.position_for_eccentric(planet.eccentric_fourier @t)
-                %td= "(%.4f, %.4f)" % planet.velocity(@t)
-                %td= "%.4f" % planet.angular_moment(@t)[2]
-                
+                %td= "(%.4f, %.4f, %.4f)" % planet.velocity(@t)
+                %td= "(%.4f, %.4f, %.4f)" % planet.angular_moment(@t)
             
           %table.pure-table
             %thead
