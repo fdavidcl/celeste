@@ -62,7 +62,7 @@ class Planet
   # Método que calcula la posición del planeta dada la anomalía
   # excéntrica u
   def position_for_eccentric_2d u
-    [a * Math::cos(u) - ε, a * Math::sqrt(1 - ε**2) * Math::sin(u)]
+    [a * (Math::cos(u) - ε), a * Math::sqrt(1 - ε**2) * Math::sin(u)]
   end
   
   def position_for_eccentric_3d u
