@@ -50,6 +50,7 @@ end
 
 set :bind, '0.0.0.0'
 set :port, 8080
+set :environment, :production
 
 def generate_frames
   @planets = YAML.load_file("planets.yaml")
