@@ -3,6 +3,8 @@
 ## Autores
 David Charte, José Luis Marqués, Almudena Gálvez
 
+![Captura de pantalla del programa en funcionamiento](screenshot.png)
+
 # Instrucciones
 
 ## Instalación (una sola vez)
